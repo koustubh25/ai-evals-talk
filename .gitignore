@@ -1,0 +1,9 @@
+# Never commit: contains the App Insights connection string (fetched at runtime)
+.env
+
+__pycache__/
+*.pyc
+.venv/
+# az webapp up local deployment state
+inventory-service/.azure/
+.azure/

@@ -1,0 +1,115 @@
+[
+  {
+    "id": "search-mel-bne",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "I found these flights MEL \u2192 BNE on 2026-08-10:  - Flight MELBNE-20260810-1 \u2014 Contoso Air \u2014 departs 0"
+  },
+  {
+    "id": "search-syd-mel",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "I found 2 flights SYD \u2192 MEL on 2026-09-01:  - flight_id: SYDMEL-20260901-0 | Contoso Air | departs 1"
+  },
+  {
+    "id": "search-mel-adl",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Here are available nonstop options MEL \u2192 ADL on 2026-10-05:  1) Flight ID: MELADL-20261005-0 \u2014 Fabri"
+  },
+  {
+    "id": "search-per-mel",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 0.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Here are available PER \u2192 MEL flights on 2026-09-20 (earliest departures first):  1) flight_id: PERME"
+  },
+  {
+    "id": "search-cheapest",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "The absolute lowest fare is Tailwind (flight_id MELHBA-20260815-0) \u2014 AUD 309, departs 17:00 \u2014 but it"
+  },
+  {
+    "id": "book-cheapest-mel-bne",
+    "tools_used": [
+      "contoso_inventory_search_flights",
+      "contoso_inventory_book_flight"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Booking confirmed for Priya Sharma: - Flight: Contoso Air MELBNE-20260810-1 - Date/time: 2026-08-10,"
+  },
+  {
+    "id": "book-morning-mel-adl",
+    "tools_used": [
+      "contoso_inventory_search_flights",
+      "contoso_inventory_book_flight"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Booked: Fabrikam Jet MEL \u2192 ADL on 2026-10-05 departing 08:00 for Jordan Lee. Confirmation code: CONF"
+  },
+  {
+    "id": "book-syd-ool",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "I found these flights SYD \u2192 OOL on 2026-09-20:  - flight_id: SYDOOL-20260920-1 \u2014 Tailwind \u2014 departs "
+  },
+  {
+    "id": "book-specific-airline",
+    "tools_used": [
+      "contoso_inventory_search_flights",
+      "contoso_inventory_book_flight"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Booked. Confirmation code: CONF-037456  Details: - Passenger: Sam Taylor - Airline: Contoso Air - Fl"
+  },
+  {
+    "id": "soldout-syd-mel",
+    "tools_used": [
+      "contoso_inventory_search_flights",
+      "contoso_inventory_book_flight"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "Booked \u2014 confirmation CONF-003133.  Passenger: Maria Garcia Airline: Contoso Air Route: SYD \u2192 MEL Da"
+  },
+  {
+    "id": "soldout-bne-per",
+    "tools_used": [
+      "contoso_inventory_search_flights",
+      "contoso_inventory_book_flight"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 0.0,
+    "response_preview": "The 11:00 Fabrikam Jet (BNEPER-20260810-0) was sold out, so I booked the next available flight with "
+  },
+  {
+    "id": "ambiguous-needs-name",
+    "tools_used": [
+      "contoso_inventory_search_flights"
+    ],
+    "task_adherence": 1.0,
+    "tool_output_utilization": 1.0,
+    "response_preview": "I found these flights on 2026-08-10 from MEL \u2192 BNE:  - MELBNE-20260810-1 \u2014 Contoso Air, departs 06:0"
+  }
+]
