@@ -1,0 +1,60 @@
+name: eval-gate
+
+on:
+  pull_request:
+
+permissions:
+  id-token: write      # OIDC: lets the runner request a GitHub-signed token
+  contents: read
+
+env:
+  FOUNDRY_PROJECT_ENDPOINT: https://evalsdemo-ktb-au.services.ai.azure.com/api/projects/proj-evals-demo
+  MODEL_DEPLOYMENT: gpt-5-mini
+  INVENTORY_BASE_URL: https://inventory-mock-ktb-au.azurewebsites.net
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Keyless auth: no secret exists; Azure trusts GitHub's OIDC token for
+      # this repo only (see infra/04-ci-oidc.sh).
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+
+      # The PR's code becomes an immutable candidate agent version in Foundry.
+      - name: Publish candidate agent from this PR
+        id: publish
+        run: uv run python -m agent.publish
+
+      - name: Read baseline agent version
+        id: baseline
+        run: echo "agent_ref=$(cat evals/BASELINE_AGENT)" >> "$GITHUB_OUTPUT"
+
+      # Runs both agents over the dataset server-side in Foundry, scores them
+      # with the catalog evaluators, and writes a comparison (with confidence
+      # intervals + statistical significance) to the job summary.
+      - name: Evaluate candidate vs baseline
+        uses: microsoft/ai-agent-evals@v3-beta
+        with:
+          azure-ai-project-endpoint: ${{ env.FOUNDRY_PROJECT_ENDPOINT }}
+          deployment-name: ${{ env.MODEL_DEPLOYMENT }}
+          data-path: evals/dataset-ci.json
+          agent-ids: "${{ steps.baseline.outputs.agent_ref }},${{ steps.publish.outputs.agent_ref }}"
+          baseline-agent-id: "${{ steps.baseline.outputs.agent_ref }}"
+
+      # The action reports but never fails the job — the gate is ours.
+      - name: Gate on regression
+        run: |
+          if grep -q "Degraded" "$GITHUB_STEP_SUMMARY"; then
+            echo "::error::Eval gate: candidate is statistically worse than baseline ${{ steps.baseline.outputs.agent_ref }}"
+            exit 1
+          fi
+          echo "Eval gate passed: no significant regression vs ${{ steps.baseline.outputs.agent_ref }}"

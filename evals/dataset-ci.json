@@ -1,0 +1,21 @@
+{
+  "name": "flight-booking-v1",
+  "evaluators": [
+    "builtin.task_adherence",
+    "builtin.tool_output_utilization"
+  ],
+  "data": [
+    { "query": "Find me a flight from MEL to BNE on 2026-08-10" },
+    { "query": "What flights go from Sydney (SYD) to Melbourne (MEL) on 2026-09-01?" },
+    { "query": "I need to get from MEL to ADL on 2026-10-05, what are my options?" },
+    { "query": "Show me flights PER to MEL on 2026-09-20, earliest departure preferred" },
+    { "query": "What's the cheapest flight from MEL to HBA on 2026-08-15?" },
+    { "query": "Book the cheapest flight from MEL to BNE on 2026-08-10 for passenger Priya Sharma" },
+    { "query": "Book me the earliest morning flight from MEL to ADL on 2026-10-05, passenger name Jordan Lee" },
+    { "query": "Please book a flight from SYD to OOL on 2026-09-20 for Alex Chen, any airline is fine" },
+    { "query": "Book a Contoso Air flight from BNE to PER on 2026-09-01 for passenger Sam Taylor; if Contoso Air has nothing, pick the cheapest alternative" },
+    { "query": "Book the 06:00 or earliest flight from SYD to MEL on 2026-08-15 for passenger Maria Garcia; if it's sold out tell me and suggest alternatives" },
+    { "query": "I want the first available flight BNE to PER on 2026-08-10 for passenger Wei Zhang. If a flight has no seats, don't book it - offer the next option instead" },
+    { "query": "Book me a flight from MEL to BNE on 2026-08-10" }
+  ]
+}
