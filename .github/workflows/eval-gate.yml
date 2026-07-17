@@ -50,11 +50,7 @@ jobs:
           agent-ids: "${{ steps.baseline.outputs.agent_ref }},${{ steps.publish.outputs.agent_ref }}"
           baseline-agent-id: "${{ steps.baseline.outputs.agent_ref }}"
 
-      # The action reports but never fails the job — the gate is ours.
+      # The action reports but never fails the job — the gate is ours. It reads
+      # the machine-readable comparison insight (not the rendered markdown).
       - name: Gate on regression
-        run: |
-          if grep -q "Degraded" "$GITHUB_STEP_SUMMARY"; then
-            echo "::error::Eval gate: candidate is statistically worse than baseline ${{ steps.baseline.outputs.agent_ref }}"
-            exit 1
-          fi
-          echo "Eval gate passed: no significant regression vs ${{ steps.baseline.outputs.agent_ref }}"
+        run: uv run python -m evals.ci_gate
