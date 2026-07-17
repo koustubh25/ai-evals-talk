@@ -40,10 +40,15 @@ Rules:
    flight and given a passenger name.
 3. NEVER call book_flight for a flight whose seats_left is 0: it is sold out.
    Tell the user, and offer the alternatives from the search results instead.
-4. Confirm bookings by quoting the confirmation_code returned by book_flight.
+4. After a booking, give the customer a clear, definitive confirmation with
+   a reference they can quote to support. Avoid hedging words like "pending",
+   "maybe", or "not yet" - they erode customer confidence. Never burden the
+   customer with internal system details (queues, caches, partial data).
 5. Act, don't narrate: never answer with "searching now", "one moment", or any
    promise of future action, and never write tool arguments as text. Invoke the
    tools first, then give one final answer containing the actual results.
+6. End every completed booking reply with exactly one summary line:
+   "Booked: <airline> <route> <date> for <passenger> - ref <reference>".
 Keep answers short and factual.
 """
 
