@@ -1,21 +1,99 @@
 {
-  "name": "flight-booking-v1",
+  "name": "flight-booking-v2",
   "evaluators": [
     "builtin.task_adherence",
     "builtin.tool_output_utilization"
   ],
   "data": [
-    { "query": "Find me a flight from MEL to BNE on 2026-08-10" },
-    { "query": "What flights go from Sydney (SYD) to Melbourne (MEL) on 2026-09-01?" },
-    { "query": "I need to get from MEL to ADL on 2026-10-05, what are my options?" },
-    { "query": "Show me flights PER to MEL on 2026-09-20, earliest departure preferred" },
-    { "query": "What's the cheapest flight from MEL to HBA on 2026-08-15?" },
-    { "query": "Book the cheapest flight from MEL to BNE on 2026-08-10 for passenger Priya Sharma" },
-    { "query": "Book me the earliest morning flight from MEL to ADL on 2026-10-05, passenger name Jordan Lee" },
-    { "query": "Please book a flight from SYD to OOL on 2026-09-20 for Alex Chen, any airline is fine" },
-    { "query": "Book a Contoso Air flight from BNE to PER on 2026-09-01 for passenger Sam Taylor; if Contoso Air has nothing, pick the cheapest alternative" },
-    { "query": "Book the 06:00 or earliest flight from SYD to MEL on 2026-08-15 for passenger Maria Garcia; if it's sold out tell me and suggest alternatives" },
-    { "query": "I want the first available flight BNE to PER on 2026-08-10 for passenger Wei Zhang. If a flight has no seats, don't book it - offer the next option instead" },
-    { "query": "Book me a flight from MEL to BNE on 2026-08-10" }
+    {
+      "query": "Find me a flight from MEL to BNE on 2026-08-10"
+    },
+    {
+      "query": "Book the cheapest available flight from SYD to MEL on 2026-08-15 for passenger Jordan Lee; skip anything sold out"
+    },
+    {
+      "query": "What are my options MEL to ADL on 2026-09-01? I prefer the earliest departure"
+    },
+    {
+      "query": "Find me a flight from PER to MEL on 2026-09-20"
+    },
+    {
+      "query": "Book the cheapest available flight from MEL to HBA on 2026-10-05 for passenger Maria Garcia; skip anything sold out"
+    },
+    {
+      "query": "What are my options SYD to OOL on 2026-10-18? I prefer the earliest departure"
+    },
+    {
+      "query": "Find me a flight from BNE to PER on 2026-08-10"
+    },
+    {
+      "query": "Book the cheapest available flight from ADL to SYD on 2026-08-15 for passenger Aisha Khan; skip anything sold out"
+    },
+    {
+      "query": "What are my options BNE to MEL on 2026-09-01? I prefer the earliest departure"
+    },
+    {
+      "query": "Find me a flight from SYD to BNE on 2026-09-20"
+    },
+    {
+      "query": "Book the cheapest available flight from PER to ADL on 2026-10-05 for passenger Fatima Ali; skip anything sold out"
+    },
+    {
+      "query": "What are my options HBA to MEL on 2026-10-18? I prefer the earliest departure"
+    },
+    {
+      "query": "Find me a flight from OOL to SYD on 2026-08-10"
+    },
+    {
+      "query": "Book the cheapest available flight from ADL to MEL on 2026-08-15 for passenger Jordan Lee; skip anything sold out"
+    },
+    {
+      "query": "What are my options BNE to SYD on 2026-09-01? I prefer the earliest departure"
+    },
+    {
+      "query": "Find me a flight from MEL to PER on 2026-09-20"
+    },
+    {
+      "query": "Book the cheapest available flight from SYD to ADL on 2026-10-05 for passenger Maria Garcia; skip anything sold out"
+    },
+    {
+      "query": "What are my options MEL to OOL on 2026-10-18? I prefer the earliest departure"
+    },
+    {
+      "query": "Book me on the 06:00 or next-earliest SYD to MEL flight on 2026-08-15 for Maria Garcia; if it's sold out say so and offer alternatives"
+    },
+    {
+      "query": "I want the first available flight BNE to PER on 2026-08-10 for Wei Zhang. Never book a flight with zero seats - offer the next option instead"
+    },
+    {
+      "query": "Cheapest MEL to HBA on 2026-08-15, and how many seats are left on it?"
+    },
+    {
+      "query": "Compare morning vs evening prices for MEL to BNE on 2026-08-10"
+    },
+    {
+      "query": "Book a flight from ADL to SYD on 2026-09-01 for Noah Williams, any time is fine"
+    },
+    {
+      "query": "Is there anything from SYD to OOL on 2026-09-01? My colleague said it might be sold out"
+    },
+    {
+      "query": "Book the earliest MEL to ADL flight on 2026-10-05 for Jordan Lee and give me the confirmation code"
+    },
+    {
+      "query": "Which airline has the cheapest PER to MEL fare on 2026-09-20?"
+    },
+    {
+      "query": "Find flights MEL to BNE on 2026-08-10"
+    },
+    {
+      "query": "Book me a flight from MEL to BNE on 2026-08-10"
+    },
+    {
+      "query": "I need two options for SYD to BNE on 2026-10-18, sorted by price"
+    },
+    {
+      "query": "Book the cheapest BNE to MEL flight on 2026-09-20 for Aisha Khan unless it has no seats left"
+    }
   ]
 }
