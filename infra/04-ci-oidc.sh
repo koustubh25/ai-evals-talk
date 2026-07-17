@@ -11,6 +11,10 @@
 set -euo pipefail
 
 REPO=koustubh25/ai-evals-talk
+# 2026 GitHub OIDC format embeds immutable account/repo IDs in the subject
+# (protects against repo-rename hijack). Classic "repo:owner/name:..." subjects
+# NO LONGER MATCH. Get the IDs from: gh api repos/$REPO --jq '.id, .owner.id'
+REPO_SUBJECT="repo:koustubh25@5240529/ai-evals-talk@1302769253"
 RG=rg-evals-demo
 ACCOUNT=evalsdemo-ktb-au
 SUB=$(az account show --query id -o tsv)
@@ -28,12 +32,12 @@ echo "clientId: $APPID"
 az ad app federated-credential create --id "$APPID" --parameters '{
   "name": "gh-pull-requests",
   "issuer": "https://token.actions.githubusercontent.com",
-  "subject": "repo:'"$REPO"':pull_request",
+  "subject": "'"$REPO_SUBJECT"':pull_request",
   "audiences": ["api://AzureADTokenExchange"]}' 2>/dev/null || true
 az ad app federated-credential create --id "$APPID" --parameters '{
   "name": "gh-main",
   "issuer": "https://token.actions.githubusercontent.com",
-  "subject": "repo:'"$REPO"':ref:refs/heads/main",
+  "subject": "'"$REPO_SUBJECT"':ref:refs/heads/main",
   "audiences": ["api://AzureADTokenExchange"]}' 2>/dev/null || true
 
 # 3. Permissions: data-plane access to the Foundry account only (least privilege)
