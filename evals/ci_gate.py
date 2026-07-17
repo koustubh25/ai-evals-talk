@@ -16,7 +16,10 @@ def main() -> None:
     project = get_client()
     client = project.get_openai_client()
 
-    latest_eval = next(iter(client.evals.list(limit=1)), None)
+    if len(sys.argv) > 1:  # pin a specific eval (rehearsal/deck use)
+        latest_eval = client.evals.retrieve(sys.argv[1])
+    else:
+        latest_eval = next(iter(client.evals.list(limit=1)), None)
     if latest_eval is None:
         sys.exit("gate: no evaluation found")
     run_ids = {r.id for r in client.evals.runs.list(eval_id=latest_eval.id)}
