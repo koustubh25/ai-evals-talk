@@ -18,17 +18,20 @@ def main() -> None:
     version = publish_agent(project)
     ref = f"{version.name}:{version.version}"
 
+    # Propagation check only: a stale config returns EMPTY output. Whether the
+    # agent uses tools correctly is the eval gate's judgment, not ours — a
+    # candidate that skips tools must fail the GATE, not the publish step.
     for attempt in range(8):
         canary = run_conversation(
             project, "Find a flight MEL to BNE on 2026-08-10",
             agent_version=version.version, details=True,
         )
-        if canary["tool_calls"]:
-            print(f"published {ref} (warm after attempt {attempt + 1})")
+        if canary["response"]:
+            print(f"published {ref} (responsive after attempt {attempt + 1})")
             break
         time.sleep(10)
     else:
-        sys.exit(f"{ref} never propagated with tools")
+        sys.exit(f"{ref} never propagated")
 
     if os.getenv("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
