@@ -74,20 +74,15 @@ def main() -> None:
         user_turns = [p.get("content", "") for m in inp if m.get("role") == "user"
                       for p in m.get("parts", []) if p.get("type") == "text"]
 
-        print("=" * W)
-        print(f"TRACE {row['OperationId'][:20]}…   {row['TimeGenerated'][:19]}")
-        print(f"agent: {props.get('gen_ai.agent.id')}   model: {props.get('gen_ai.response.model')}")
-        print("=" * W)
-        for u in user_turns[-2:]:
-            print(f"\nCUSTOMER:\n  {u[:220]}")
-        print(f"\nBOOKING TOOL ACTUALLY RETURNED:")
-        for line in ("status: accepted", "seat held … while ticketing completes", "confirmation_code: null"):
-            print(f"  {line}")
-        print(f"\nAGENT TOLD THE CUSTOMER:\n  {answer[:300]}")
-        print("\n" + "=" * W)
-        print('  tool: confirmation_code = null        agent: "confirmed"')
-        print("  CI was green. This is what production did.")
-        print("=" * W)
+        print(f"TRACE {row['OperationId'][:20]}…   {row['TimeGenerated'][:19]}   {props.get('gen_ai.agent.id')}")
+        print("─" * W)
+        if user_turns:
+            print(f"CUSTOMER:  {user_turns[-1][:150]}")
+        print(f"\nBOOKING TOOL RETURNED:  \033[1;33mstatus: accepted · seat held ·")
+        print("                        \033[1;33mconfirmation_code: null\033[0m")
+        print(f"\nAGENT TOLD THE CUSTOMER:\n  \033[1;31m{answer[:220]}\033[0m")
+        print("─" * W)
+        print('tool said \033[1;33mnull\033[0m · agent said \033[1;31m"confirmed"\033[0m · and CI was green')
         return
     print("no hallucinated-confirmation trace found in the last 6h "
           "(run: uv run python -m runbook.drive_incident, wait ~90s for ingestion)")
