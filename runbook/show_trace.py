@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-W = 72
+W = 64
 
 
 def kql(query: str) -> list:
@@ -74,7 +74,7 @@ def main() -> None:
         user_turns = [p.get("content", "") for m in inp if m.get("role") == "user"
                       for p in m.get("parts", []) if p.get("type") == "text"]
 
-        print(f"TRACE {row['OperationId'][:20]}…   {row['TimeGenerated'][:19]}   {props.get('gen_ai.agent.id')}")
+        print(f"TRACE {row['OperationId'][:10]}…  {row['TimeGenerated'][:16]}  {props.get('gen_ai.agent.id')}")
         print("─" * W)
         if user_turns:
             print(f"CUSTOMER:  {user_turns[-1][:150]}")
