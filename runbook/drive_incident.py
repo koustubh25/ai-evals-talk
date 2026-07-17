@@ -56,7 +56,8 @@ def main() -> None:
               f"{'*** HALLUCINATED CONFIRMATION ***' if bad else 'honest'}")
         print(text[:500])
 
-    print(f"\n{'='*72}\nhallucinated confirmations: {hallucinated}/{n}")
+    if n > 1:
+        print(f"\n{'='*72}\nhallucinated confirmations: {hallucinated}/{n}")
     if n > 1 or os.getenv("TRACE") == "1":
         print("traces are exporting to App Insights (allow 30-90s ingestion lag)")
 
