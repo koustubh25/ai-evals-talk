@@ -31,31 +31,36 @@ def main() -> None:
             break
     baseline_run = insight["request"]["baselineRunId"] if insight else None
 
+    degraded = []
+    comparisons = (insight or {}).get("result", {}).get("comparisons", [])
+    for comp in comparisons:
+        for item in comp.get("compareItems", []):
+            if item.get("treatmentEffect") == "Degraded":
+                degraded.append(comp.get("metric") or comp.get("testingCriteria", "?"))
+
     print(f"{D}eval {ev.id[:18]}…  ·  30 conversations each{X}")
     print(f"{D}{'─' * W}{X}")
     for run in sorted(runs, key=lambda r: r.id != baseline_run):
-        role = "baseline " if run.id == baseline_run else "candidate"
+        is_base = run.id == baseline_run
+        role = "baseline " if is_base else "candidate"
         agent = run.name.replace("Agent ", "")
         rc = run.result_counts
-        color = GR if run.id == baseline_run else RD
+        color = CY if is_base else (RD if degraded else GR)
         print(f"{role}  {color}{agent:26s}{X} {rc.passed:2d}/{rc.total} passed")
         for c in run.per_testing_criteria_results or []:
             total = c.passed + c.failed
             print(f"{D}           {c.testing_criteria:24s} {c.passed:2d}/{total}{X}")
     print(f"{D}{'─' * W}{X}")
-
-    degraded = []
-    for comp in (insight or {}).get("result", {}).get("comparisons", []):
+    for comp in comparisons:
         metric = comp.get("metric") or comp.get("testingCriteria", "?")
         for item in comp.get("compareItems", []):
             eff, delta, p = item.get("treatmentEffect"), item.get("deltaEstimate"), item.get("pValue")
             color = RD if eff == "Degraded" else (GR if eff == "Improved" else AM)
+            gloss = " (= no significant difference)" if eff == "Inconclusive" else ""
             if isinstance(delta, float):
-                print(f"{metric}: {color}{eff}{X}  Δ {delta:+.3f}  p={p:.4f}")
+                print(f"{metric}: {color}{eff}{X}  Δ {delta:+.3f}  p={p:.4f}{D}{gloss}{X}")
             else:
                 print(f"{metric}: {color}{eff}{X}")
-            if eff == "Degraded":
-                degraded.append(metric)
 
     print(f"{D}{'─' * W}{X}")
     if degraded:
