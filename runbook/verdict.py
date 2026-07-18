@@ -20,8 +20,8 @@ def main() -> None:
     client = project.get_openai_client()
 
     brief = "--brief" in sys.argv
-args = [a for a in sys.argv[1:] if not a.startswith("--")]
-ev = client.evals.retrieve(args[0]) if args else next(iter(client.evals.list(limit=1)))
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    ev = client.evals.retrieve(args[0]) if args else next(iter(client.evals.list(limit=1)))
     runs = list(client.evals.runs.list(eval_id=ev.id))
 
     # insight (statistical comparison) for this eval
