@@ -40,7 +40,8 @@ def main() -> None:
             if item.get("treatmentEffect") == "Degraded":
                 degraded.append(comp.get("metric") or comp.get("testingCriteria", "?"))
 
-    print(f"{D}eval {ev.id[:18]}…  ·  30 conversations each{X}")
+    if not brief:
+        print(f"{D}eval {ev.id[:18]}…  ·  30 conversations each{X}")
     print(f"{D}{'─' * W}{X}")
     for run in sorted(runs, key=lambda r: r.id != baseline_run):
         is_base = run.id == baseline_run
