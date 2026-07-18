@@ -42,7 +42,7 @@ def main() -> None:
 
     if not brief:
         print(f"{D}eval {ev.id[:18]}…  ·  30 conversations each{X}")
-    print(f"{D}{'─' * W}{X}")
+        print(f"{D}{'─' * W}{X}")
     for run in sorted(runs, key=lambda r: r.id != baseline_run):
         is_base = run.id == baseline_run
         role = "baseline " if is_base else "candidate"
@@ -61,7 +61,7 @@ def main() -> None:
             if brief and eff == "TooFewSamples":
                 continue
             color = RD if eff == "Degraded" else (GR if eff == "Improved" else AM)
-            gloss = " (no sig. difference)" if eff == "Inconclusive" else ""
+            gloss = "" if brief else (" (no sig. difference)" if eff == "Inconclusive" else "")
             if isinstance(delta, float):
                 print(f"{metric}: {color}{eff}{X}  Δ {delta:+.3f}  p={p:.4f}{D}{gloss}{X}")
             else:
