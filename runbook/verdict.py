@@ -64,11 +64,13 @@ def main() -> None:
             if brief and eff == "TooFewSamples":
                 continue
             color = RD if eff == "Degraded" else (GR if eff == "Improved" else AM)
-            gloss = "" if brief else (" (no sig. difference)" if eff == "Inconclusive" else "")
+            label = eff
+            if eff == "Inconclusive":
+                label, color = "no significant change", GR
             if isinstance(delta, float):
-                print(f"{metric}: {color}{eff}{X}  Δ {delta:+.3f}  p={p:.4f}{D}{gloss}{X}")
+                print(f"{metric}: {color}{label}{X}  {D}Δ {delta:+.3f}  p={p:.4f}{X}")
             else:
-                print(f"{metric}: {color}{eff}{X}")
+                print(f"{metric}: {color}{label}{X}")
 
     if not brief:
         print(f"{D}{'─' * W}{X}")
