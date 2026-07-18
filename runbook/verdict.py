@@ -55,8 +55,6 @@ def main() -> None:
             print(f"{D}           {c.testing_criteria:24s} {c.passed:2d}/{total}{X}")
     if not brief:
         print(f"{D}{'─' * W}{X}")
-    else:
-        print()
     for comp in comparisons:
         metric = comp.get("metric") or comp.get("testingCriteria", "?")
         for item in comp.get("compareItems", []):
