@@ -53,7 +53,10 @@ def main() -> None:
         for c in [] if brief else (run.per_testing_criteria_results or []):
             total = c.passed + c.failed
             print(f"{D}           {c.testing_criteria:24s} {c.passed:2d}/{total}{X}")
-    print(f"{D}{'─' * W}{X}")
+    if not brief:
+        print(f"{D}{'─' * W}{X}")
+    else:
+        print()
     for comp in comparisons:
         metric = comp.get("metric") or comp.get("testingCriteria", "?")
         for item in comp.get("compareItems", []):
@@ -67,7 +70,8 @@ def main() -> None:
             else:
                 print(f"{metric}: {color}{eff}{X}")
 
-    print(f"{D}{'─' * W}{X}")
+    if not brief:
+        print(f"{D}{'─' * W}{X}")
     if degraded:
         print(f"{RD}GATE: FAIL — statistically significant regression{X}")
         sys.exit(1)
