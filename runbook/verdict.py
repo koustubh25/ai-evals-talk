@@ -57,6 +57,8 @@ def main() -> None:
         metric = comp.get("metric") or comp.get("testingCriteria", "?")
         for item in comp.get("compareItems", []):
             eff, delta, p = item.get("treatmentEffect"), item.get("deltaEstimate"), item.get("pValue")
+            if brief and eff == "TooFewSamples":
+                continue
             color = RD if eff == "Degraded" else (GR if eff == "Improved" else AM)
             gloss = " (no sig. difference)" if eff == "Inconclusive" else ""
             if isinstance(delta, float):
