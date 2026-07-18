@@ -8,10 +8,13 @@ Capture mode (n>1): traces every conversation to App Insights for mining.
 Usage:  uv run python -m runbook.drive_incident [n_conversations]
 """
 
+import json
 import os
 import sys
 
-from agent.agent import AGENT_NAME, get_client, setup_tracing
+import httpx
+
+from agent.agent import AGENT_NAME, INVENTORY_BASE_URL, get_client, setup_tracing
 
 CY, GR, RD, D, X = "\033[1;36m", "\033[1;32m", "\033[1;31m", "\033[2m", "\033[0m"
 
@@ -50,9 +53,16 @@ def converse(client, ref, passenger, date):
     r2 = turn(client, ref, q2, prev=r1.id)
     text = r2.output_text or "(empty)"
     lower = text.lower()
-    bad = ("confirmed" in lower or lower.startswith("booked") or "booked:" in lower) \
+    claims_confirmed = ("confirmed" in lower or lower.startswith("booked") or "booked:" in lower) \
         and "not confirmed" not in lower and "not yet" not in lower
-    return text, bad
+    # ground truth: what did the booking TOOL actually return?
+    tool_out = " ".join(
+        str((i.to_dict() if hasattr(i, "to_dict") else vars(i)).get("output", ""))
+        for i in r2.output if i.type == "openapi_call_output"
+    )
+    really_confirmed = '"confirmation_code": "CONF' in tool_out or "CONF-" in tool_out
+    # hallucination = claims confirmed while the tool never issued a code
+    return text, claims_confirmed and not really_confirmed
 
 
 def main() -> None:
@@ -65,6 +75,11 @@ def main() -> None:
         setup_tracing(project)
     client = project.get_openai_client()
     ref = {"type": "agent_reference", "name": AGENT_NAME}
+
+    health = httpx.get(f"{INVENTORY_BASE_URL}/healthz", timeout=15).json()
+    if not health.get("degraded"):
+        sys.exit(f"{RD}inventory is HEALTHY - this scene needs the incident:{X}"
+                 "  ./runbook/degrade.sh on")
 
     if n == 1:
         # stage mode: fresh customers until the failure shows (max 3 tries)
