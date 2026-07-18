@@ -143,7 +143,7 @@ def run_conversation(
         used_tools = any(i.type == "openapi_call" for i in response.output)
         if response.status == "completed" and used_tools and response.output_text:
             break
-        print(f"    [retry {attempt + 1}] status={response.status} items={[i.type for i in response.output]}")
+        print(f"\033[2m    [model hiccup, retry {attempt + 1}]\033[0m")
     if details:
         # Tools ran server-side; the output carries openapi_call/_output item
         # pairs (linked by call_id) as evidence. Reasoning items are skipped.
