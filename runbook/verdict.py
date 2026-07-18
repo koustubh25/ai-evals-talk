@@ -19,7 +19,9 @@ def main() -> None:
     project = get_client()
     client = project.get_openai_client()
 
-    ev = client.evals.retrieve(sys.argv[1]) if len(sys.argv) > 1 else next(iter(client.evals.list(limit=1)))
+    brief = "--brief" in sys.argv
+args = [a for a in sys.argv[1:] if not a.startswith("--")]
+ev = client.evals.retrieve(args[0]) if args else next(iter(client.evals.list(limit=1)))
     runs = list(client.evals.runs.list(eval_id=ev.id))
 
     # insight (statistical comparison) for this eval
@@ -47,7 +49,7 @@ def main() -> None:
         rc = run.result_counts
         color = CY if is_base else (RD if degraded else GR)
         print(f"{role}  {color}{agent:26s}{X} {rc.passed:2d}/{rc.total} passed")
-        for c in run.per_testing_criteria_results or []:
+        for c in [] if brief else (run.per_testing_criteria_results or []):
             total = c.passed + c.failed
             print(f"{D}           {c.testing_criteria:24s} {c.passed:2d}/{total}{X}")
     print(f"{D}{'─' * W}{X}")
@@ -56,7 +58,7 @@ def main() -> None:
         for item in comp.get("compareItems", []):
             eff, delta, p = item.get("treatmentEffect"), item.get("deltaEstimate"), item.get("pValue")
             color = RD if eff == "Degraded" else (GR if eff == "Improved" else AM)
-            gloss = " (= no significant difference)" if eff == "Inconclusive" else ""
+            gloss = " (no sig. difference)" if eff == "Inconclusive" else ""
             if isinstance(delta, float):
                 print(f"{metric}: {color}{eff}{X}  Δ {delta:+.3f}  p={p:.4f}{D}{gloss}{X}")
             else:
