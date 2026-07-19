@@ -12,7 +12,7 @@ import sys
 from agent.agent import get_client
 
 GR, RD, AM, CY, D, X = "\033[1;32m", "\033[1;31m", "\033[1;33m", "\033[1;36m", "\033[2m", "\033[0m"
-W = 56
+W = 62
 
 
 def main() -> None:
@@ -45,11 +45,11 @@ def main() -> None:
         print(f"{D}{'─' * W}{X}")
     for run in sorted(runs, key=lambda r: r.id != baseline_run):
         is_base = run.id == baseline_run
-        role = "baseline " if is_base else "candidate"
-        agent = run.name.replace("Agent ", "")
+        role = "baseline  (in production)" if is_base else "candidate (this PR)     "
+        agent = run.name.replace("Agent ", "").replace("flight-booking-agent", "agent")
         rc = run.result_counts
         color = CY if is_base else (RD if degraded else GR)
-        print(f"{role}  {color}{agent:26s}{X} {rc.passed:2d}/{rc.total} passed")
+        print(f"{role}  {color}{agent:10s}{X} {rc.passed:2d}/{rc.total} conversations passed")
         for c in [] if brief else (run.per_testing_criteria_results or []):
             total = c.passed + c.failed
             print(f"{D}           {c.testing_criteria:24s} {c.passed:2d}/{total}{X}")
@@ -73,9 +73,9 @@ def main() -> None:
     if not brief:
         print(f"{D}{'─' * W}{X}")
     if degraded:
-        print(f"{RD}GATE: FAIL — statistically significant regression{X}")
+        print(f"{RD}GATE: FAIL — this PR makes the agent significantly worse{X}")
         sys.exit(1)
-    print(f"{GR}GATE: PASS — no significant regression vs baseline{X}")
+    print(f"{GR}GATE: PASS — no significant change vs production{X}")
 
 
 if __name__ == "__main__":
