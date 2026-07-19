@@ -19,6 +19,7 @@ import random
 from datetime import date
 
 from fastapi import FastAPI, HTTPException, Response
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 app = FastAPI(
@@ -105,6 +106,33 @@ def book_flight(req: BookRequest):
         "flight_id": req.flight_id,
         "passenger": req.passenger,
     }
+
+
+# Short-link redirector for the talk slides (cmd+click in the terminal).
+# Hidden from the OpenAPI schema like the other non-tool endpoints.
+_WSID = ("/subscriptions/5d98f681-c627-4a4d-9f1d-001ae04c2358/resourceGroups/rg-evals-demo"
+         "/providers/Microsoft.CognitiveServices/accounts/evalsdemo-ktb-au/projects/proj-evals-demo")
+_TID = "tid=79fa077b-e5f3-474a-8e36-c79ac59b00ed"
+_GH = "https://github.com/koustubh25/ai-evals-talk"
+GO = {
+    "repo": _GH,
+    "pr1": f"{_GH}/pull/1/commits",
+    "red-run": f"{_GH}/actions/runs/29558000033",
+    "green-run": f"{_GH}/actions/runs/29558629014",
+    "pr2": f"{_GH}/pull/2/files",
+    "act2-run": f"{_GH}/actions/runs/29574563822",
+    "foundry": f"https://ai.azure.com/foundryProject/overview?wsid={_WSID}&{_TID}",
+    "traces": f"https://ai.azure.com/foundryProject/tracing?wsid={_WSID}&{_TID}",
+    "evals": f"https://ai.azure.com/foundryProject/evaluation?wsid={_WSID}&{_TID}",
+    "datagen": f"https://ai.azure.com/foundryProject/dataGeneration?wsid={_WSID}&{_TID}",
+}
+
+
+@app.get("/go/{name}", include_in_schema=False)
+def go(name: str):
+    if name not in GO:
+        raise HTTPException(status_code=404, detail=f"unknown link; try: {', '.join(GO)}")
+    return RedirectResponse(GO[name])
 
 
 # include_in_schema=False: callable, but invisible in openapi.json — the agent
