@@ -116,7 +116,7 @@ _TID = "tid=79fa077b-e5f3-474a-8e36-c79ac59b00ed"
 _GH = "https://github.com/koustubh25/ai-evals-talk"
 GO = {
     "repo": _GH,
-    "pr1": f"{_GH}/pull/1/commits",
+    "pr1": f"{_GH}/compare/04be9b04e5c4...29bc6f2e6af7",  # the sabotage diff shown on slide 6
     "red-run": f"{_GH}/actions/runs/29558000033",
     "green-run": f"{_GH}/actions/runs/29558629014",
     "pr2": f"{_GH}/pull/2/files",
